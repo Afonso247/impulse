@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:impulse/models/expense.dart';
 import 'package:impulse/components/expenses_list.dart';
+import 'package:impulse/components/new_expense.dart';
 
 class Impulse extends StatefulWidget {
   const Impulse({super.key});
@@ -26,6 +27,15 @@ class _ImpulseState extends State<Impulse> {
     ),
   ];
 
+  void _openAddExpenseOverlay() {
+    showModalBottomSheet(
+      useSafeArea: true,
+      isScrollControlled: true,
+      context: context,
+      builder: (ctx) => const NewExpense(),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,7 +45,7 @@ class _ImpulseState extends State<Impulse> {
         actions: [
           IconButton(
             icon: const Icon(Icons.add),
-            onPressed: () {},
+            onPressed: _openAddExpenseOverlay,
           ),
         ],
       ),
