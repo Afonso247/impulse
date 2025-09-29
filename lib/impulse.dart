@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:impulse/models/expense.dart';
+
 class Impulse extends StatefulWidget {
   const Impulse({super.key});
 
@@ -8,6 +10,21 @@ class Impulse extends StatefulWidget {
 }
 
 class _ImpulseState extends State<Impulse> {
+  final List<Expense> _registeredExpenses = [
+    Expense(
+      title: 'Comida',
+      amount: 19.99,
+      date: DateTime.now(),
+      category: Category.comida,
+    ),
+    Expense(
+      title: 'Lazer',
+      amount: 19.99,
+      date: DateTime.now(),
+      category: Category.lazer,
+    ),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
