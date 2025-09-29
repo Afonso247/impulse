@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:impulse/models/expense.dart';
+import 'package:impulse/components/expenses_list.dart';
 
 class Impulse extends StatefulWidget {
   const Impulse({super.key});
@@ -28,10 +29,12 @@ class _ImpulseState extends State<Impulse> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(children: const [
-        Text('Impulse'),
-        Text('Lista de compras...'),
-      ],),
+      body: Column(
+        children: [
+          Text('Impulse'),
+          Expanded(child: ExpensesList(expenses: _registeredExpenses)),
+        ],
+      ),
     );
   }
 }
