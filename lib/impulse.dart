@@ -29,9 +29,19 @@ class _ImpulseState extends State<Impulse> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Supertroco'),
+        centerTitle: true,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.add),
+            onPressed: () {},
+          ),
+        ],
+      ),
       body: Column(
         children: [
-          Text('Impulse'),
+          Text('Organize seus gastos'),
           Expanded(child: ExpensesList(expenses: _registeredExpenses)),
         ],
       ),
