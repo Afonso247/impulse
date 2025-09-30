@@ -65,9 +65,44 @@ class _ImpulseState extends State<Impulse> {
 
   @override
   Widget build(BuildContext context) {
+     Widget listContent = Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          SizedBox(height: 48),
+          Icon(
+            Icons.receipt_long_outlined,
+            size: 64,
+            color: Theme.of(context).colorScheme.primary.withOpacity(0.3),
+          ),
+          const SizedBox(height: 16),
+          Text(
+            'Nenhuma despesa cadastrada!',
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'Toque no + para adicionar',
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              color: Theme.of(context).colorScheme.onSurfaceVariant.withOpacity(0.7),
+            ),
+          ),
+        ],
+      ),
+    );
+
+    if (_registeredExpenses.isNotEmpty) {
+      listContent = ExpensesList(
+        expenses: _registeredExpenses,
+        onRemoveExpense: _removeExpense,
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Supertroco'),
+        title: const Text('Impulse', style: TextStyle(color: Colors.black, fontSize: 28)),
         centerTitle: true,
         actions: [
           IconButton(
@@ -78,12 +113,10 @@ class _ImpulseState extends State<Impulse> {
       ),
       body: Column(
         children: [
-          Text('Organize seus gastos'),
+          Text('Organize seus gastos', style: Theme.of(context).textTheme.titleMedium),
+          const SizedBox(height: 16),
           Expanded(
-            child: ExpensesList(
-              expenses: _registeredExpenses,
-              onRemoveExpense: _removeExpense,
-            ),
+            child: listContent,
           ),
         ],
       ),
