@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:impulse/models/expense.dart';
 import 'package:impulse/components/expenses_list.dart';
 import 'package:impulse/components/new_expense.dart';
+import 'package:impulse/components/chart/chart.dart';
 
 class Impulse extends StatefulWidget {
   const Impulse({super.key});
@@ -115,7 +116,7 @@ class _ImpulseState extends State<Impulse> {
       ),
       body: Column(
         children: [
-          Text('Organize seus gastos', style: Theme.of(context).textTheme.titleMedium),
+          Chart(expenses: _registeredExpenses),
           const SizedBox(height: 16),
           Expanded(
             child: listContent,
