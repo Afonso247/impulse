@@ -5,7 +5,9 @@ import 'package:intl/intl.dart';
 import 'package:impulse/models/expense.dart';
 
 class NewExpense extends StatefulWidget {
-  const NewExpense({super.key});
+  const NewExpense({required this.onAddExpense, super.key});
+
+  final void Function(Expense expense) onAddExpense;
 
   @override
   State<NewExpense> createState() => _NewExpenseState();
@@ -28,6 +30,41 @@ class _NewExpenseState extends State<NewExpense> {
     setState(() {
       _selectedDate = pickedDate;
     });
+  }
+
+  void _submitExpenseData() {
+    final enteredAmount = double.tryParse(_amountController.text);
+    final amountIsInvalid = enteredAmount == null || enteredAmount <= 0;
+
+    if (_titleController.text.trim().isEmpty ||
+        amountIsInvalid ||
+        _selectedDate == null) {
+      showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: const Text('Ocorreu um erro!'),
+          content: const Text('Preencha todos os campos!'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(ctx),
+              child: const Text('Fechar'),
+            ),
+          ],
+        ),
+      );
+      return;
+    }
+
+    final expense = Expense(
+      title: _titleController.text,
+      amount: enteredAmount,
+      date: _selectedDate!,
+      category: _selectedCategory,
+    );
+
+    widget.onAddExpense(expense);
+
+    Navigator.pop(context, expense); // Fechar o modal
   }
 
   @override
@@ -122,10 +159,7 @@ class _NewExpenseState extends State<NewExpense> {
                     child: const Text('Cancelar'),
                   ),
                   ElevatedButton(
-                    onPressed: () {
-                      debugPrint(_titleController.text);
-                      debugPrint(_amountController.text);
-                    },
+                    onPressed: _submitExpenseData,
                     child: const Text('Salvar'),
                   ),
                 ],
