@@ -6,7 +6,7 @@ import 'package:impulse/impulse.dart';
 const brightness = Brightness.light;
 const primary = Color(0xFF0175C2);
 const onPrimary = Color(0xFFFFFFFF);
-const secondary = Color(0xFF13B9FD);
+const secondary = Color(0xFFC0E0FF);
 const onSecondary = Color(0xFF000000);
 const error = Color(0xFFB00020);
 const onError = Color(0xFFFFFFFF);
