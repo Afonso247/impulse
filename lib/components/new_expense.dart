@@ -53,7 +53,12 @@ class _NewExpenseState extends State<NewExpense> {
                 },
                 child: const Text('Salvar'),
               ),
-              TextButton(onPressed: () {}, child: const Text('Cancelar')),
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text('Cancelar'),
+              ),
             ],
           ),
         ],
