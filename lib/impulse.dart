@@ -73,6 +73,7 @@ class _ImpulseState extends State<Impulse> {
           Icon(
             Icons.receipt_long_outlined,
             size: 64,
+            // ignore: deprecated_member_use
             color: Theme.of(context).colorScheme.primary.withOpacity(0.3),
           ),
           const SizedBox(height: 16),
@@ -86,6 +87,7 @@ class _ImpulseState extends State<Impulse> {
           Text(
             'Toque no + para adicionar',
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              // ignore: deprecated_member_use
               color: Theme.of(context).colorScheme.onSurfaceVariant.withOpacity(0.7),
             ),
           ),
@@ -102,7 +104,7 @@ class _ImpulseState extends State<Impulse> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Impulse', style: TextStyle(color: Colors.black, fontSize: 28)),
+        title: const Text('Impulse', style: TextStyle(fontSize: 28)),
         centerTitle: true,
         actions: [
           IconButton(
