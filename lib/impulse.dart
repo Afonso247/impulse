@@ -51,7 +51,7 @@ class _ImpulseState extends State<Impulse> {
     ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: const Text('Despesa excluída!'),
+        content: const Text('Despesa excluída!'),
         action: SnackBarAction(
           label: 'Desfazer',
           onPressed: () {
@@ -66,7 +66,9 @@ class _ImpulseState extends State<Impulse> {
 
   @override
   Widget build(BuildContext context) {
-     Widget listContent = Center(
+    final width = MediaQuery.of(context).size.width;
+    
+    Widget listContent = Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
@@ -114,15 +116,26 @@ class _ImpulseState extends State<Impulse> {
           ),
         ],
       ),
-      body: Column(
-        children: [
-          Chart(expenses: _registeredExpenses),
-          const SizedBox(height: 16),
-          Expanded(
-            child: listContent,
-          ),
-        ],
-      ),
+      body: width >= 600
+          ? Row(
+              children: [
+                Expanded(
+                  child: Chart(expenses: _registeredExpenses),
+                ),
+                Expanded(
+                  child: listContent,
+                ),
+              ],
+            )
+          : Column(
+              children: [
+                Chart(expenses: _registeredExpenses),
+                const SizedBox(height: 16),
+                Expanded(
+                  child: listContent,
+                ),
+              ],
+            ),
     );
   }
 }
