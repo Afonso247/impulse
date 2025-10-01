@@ -64,7 +64,7 @@ class _NewExpenseState extends State<NewExpense> {
 
     widget.onAddExpense(expense);
 
-    Navigator.pop(context, expense); // Fechar o modal
+    Navigator.pop(context, expense);
   }
 
   @override
@@ -77,106 +77,220 @@ class _NewExpenseState extends State<NewExpense> {
   @override
   Widget build(BuildContext context) {
     final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
-    return SizedBox(
-      height: double.infinity,
-      child: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.fromLTRB(16, 16, 16, keyboardHeight + 16),
-          child: Column(
-            // mainAxisSize: MainAxisSize.min,
-            children: [
-              const Text('Cadastrar despesa'),
-              TextField(
-                controller: _titleController,
-                maxLength: 50,
-                decoration: const InputDecoration(labelText: 'Título'),
-              ),
-              Row(
+
+    return LayoutBuilder(
+      builder: (ctx, constraints) {
+        final width = constraints.maxWidth;
+
+        return SizedBox(
+          height: double.infinity,
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(16, 16, 16, keyboardHeight + 16),
+              child: Column(
                 children: [
-                  Expanded(
-                    child: TextField(
-                      controller: _amountController,
-                      keyboardType: TextInputType.number,
-                      inputFormatters: [
-                        FilteringTextInputFormatter.allow(
-                          RegExp(r'^\d+\.?\d{0,2}'),
-                        ),
-                      ],
-                      decoration: const InputDecoration(
-                        labelText: 'Valor',
-                        prefixText: 'R\$ ',
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
+                  const Text('Cadastrar despesa'),
+                  if (width >= 600)
+                    // Layout para telas largas (>= 600)
+                    Column(
                       children: [
-                        Flexible(
-                          child: Text(
-                            _selectedDate == null
-                                ? 'Insira uma data'
-                                : DateFormat('dd/MM/yyyy').format(_selectedDate!),
-                            overflow: TextOverflow.ellipsis,
+                        // Título e Valor lado a lado
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: TextField(
+                                controller: _titleController,
+                                maxLength: 50,
+                                decoration: const InputDecoration(
+                                  labelText: 'Título',
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 16),
+                            Expanded(
+                              child: TextField(
+                                controller: _amountController,
+                                keyboardType: TextInputType.number,
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.allow(
+                                    RegExp(r'^\d+\.?\d{0,2}'),
+                                  ),
+                                ],
+                                decoration: const InputDecoration(
+                                  labelText: 'Valor',
+                                  prefixText: 'R\$ ',
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 16),
+                        // Categoria e Data lado a lado
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            DropdownButton(
+                              value: _selectedCategory,
+                              items: Category.values
+                                  .map(
+                                    (category) => DropdownMenuItem(
+                                      value: category,
+                                      child: Text(
+                                        category.name.toUpperCase(),
+                                        style: const TextStyle(fontSize: 18),
+                                      ),
+                                    ),
+                                  )
+                                  .toList(),
+                              onChanged: (value) {
+                                if (value == null) {
+                                  return;
+                                }
+                                setState(() {
+                                  _selectedCategory = value;
+                                });
+                              },
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  _selectedDate == null
+                                      ? 'Insira uma data'
+                                      : DateFormat(
+                                          'dd/MM/yyyy',
+                                        ).format(_selectedDate!),
+                                ),
+                                IconButton(
+                                  onPressed: _presentDatePicker,
+                                  icon: const Icon(Icons.calendar_month),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 16),
+                        // Botões
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: const Text('Cancelar'),
+                            ),
+                            ElevatedButton(
+                              onPressed: _submitExpenseData,
+                              child: const Text('Salvar'),
+                            ),
+                          ],
+                        ),
+                      ],
+                    )
+                  else
+                    // Layout para telas estreitas (< 600)
+                    Column(
+                      children: [
+                        TextField(
+                          controller: _titleController,
+                          maxLength: 50,
+                          decoration: const InputDecoration(
+                            labelText: 'Título',
                           ),
                         ),
-                        IconButton(
-                          onPressed: _presentDatePicker,
-                          icon: const Icon(Icons.calendar_month),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: TextField(
+                                controller: _amountController,
+                                keyboardType: TextInputType.number,
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.allow(
+                                    RegExp(r'^\d+\.?\d{0,2}'),
+                                  ),
+                                ],
+                                decoration: const InputDecoration(
+                                  labelText: 'Valor',
+                                  prefixText: 'R\$ ',
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 16),
+                            Expanded(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Flexible(
+                                    child: Text(
+                                      _selectedDate == null
+                                          ? 'Insira uma data'
+                                          : DateFormat(
+                                              'dd/MM/yyyy',
+                                            ).format(_selectedDate!),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                  IconButton(
+                                    onPressed: _presentDatePicker,
+                                    icon: const Icon(Icons.calendar_month),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 16),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            DropdownButton(
+                              value: _selectedCategory,
+                              items: Category.values
+                                  .map(
+                                    (category) => DropdownMenuItem(
+                                      value: category,
+                                      child: Text(
+                                        category.name.toUpperCase(),
+                                        style: const TextStyle(fontSize: 18),
+                                      ),
+                                    ),
+                                  )
+                                  .toList(),
+                              onChanged: (value) {
+                                if (value == null) {
+                                  return;
+                                }
+                                setState(() {
+                                  _selectedCategory = value;
+                                });
+                              },
+                            ),
+                            Row(
+                              children: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Text('Cancelar'),
+                                ),
+                                ElevatedButton(
+                                  onPressed: _submitExpenseData,
+                                  child: const Text('Salvar'),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                  ),
                 ],
               ),
-              const SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  DropdownButton(
-                    value: _selectedCategory,
-                    items: Category.values
-                        .map(
-                          (category) => DropdownMenuItem(
-                            value: category,
-                            child: Text(
-                              category.name.toUpperCase(),
-                              style: const TextStyle(fontSize: 18),
-                            ),
-                          ),
-                        )
-                        .toList(),
-                    onChanged: (value) {
-                      if (value == null) {
-                        return;
-                      }
-                      setState(() {
-                        _selectedCategory = value;
-                      });
-                    },
-                  ),
-                  Row(
-                    children: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: const Text('Cancelar'),
-                      ),
-                      ElevatedButton(
-                        onPressed: _submitExpenseData,
-                        child: const Text('Salvar'),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ],
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }
